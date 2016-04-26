@@ -5,14 +5,22 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import java.util.List;
+
+import retrofit2.http.GET;
 import rx.Observable;
+import rx.Scheduler;
 import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private final static String LOG_TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,34 +56,93 @@ public class MainActivity extends AppCompatActivity {
 //                    }
 //                }).subscribe(onNextAction);
         //2多层转换
-        Observable.just("Hello").map(new Func1<String, Boolean>() {
-            @Override
-            public Boolean call(String s) {
-                if (s.length() > 5) {
-                    return false;
-                } else {
-                    return true;
-                }
-            }
-        }).map(new Func1<Boolean, String>() {
-            @Override
-            public String call(Boolean aBoolean) {
-                return aBoolean ? "长度大于5" : "长度小于5";
-            }
-        }).subscribe(new Action1<String>() {
-            @Override
-            public void call(String s) {
-                Log.e("TAG", s);
-            }
-        });
+//        Observable.just("Hello").map(new Func1<String, Boolean>() {
+//            @Override
+//            public Boolean call(String s) {
+//                if (s.length() > 5) {
+//                    return false;
+//                } else {
+//                    return true;
+//                }
+//            }
+//        }).map(new Func1<Boolean, String>() {
+//            @Override
+//            public String call(Boolean aBoolean) {
+//                return aBoolean ? "长度大于5" : "长度小于5";
+//            }
+//        }).subscribe(new Action1<String>() {
+//            @Override
+//            public void call(String s) {
+//                Log.e("TAG", s);
+//            }
+//        });
+        //from方式执行数组
+//        String[] fromStr = {"str1", "str2", "str3", "str4", "str1"};
+//        Observable.from(fromStr).subscribe(new Action1<String>() {
+//            @Override
+//            public void call(String s) {
+//                Log.e(LOG_TAG, "onNextAction" + s);
+//            }
+//        });
+
+
+//        threadLearn();
+        callbackLearn();
+    }
+
+    //    //线程练习
+    private void threadLearn() {
+        Observable.just("str1", "str2")
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+
+                    }
+                });
+
+
+    }
+
+    /**
+     * 使用RxJava优化回调
+     */
+    private void callbackLearn() {
+
+        TExtCallBackRxB.newUserCallBackSubscribe("begin")
+//                .map(new Func1<String, String>() {
+//                    @Override
+//                    public String call(String s) {
+//                        return "map Str";
+//                    }
+//                })
+                .subscribe(TExtCallBackRxB.userCallBackSubscribe("", new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.e(LOG_TAG, "OK");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        Log.e(LOG_TAG, s);
+                    }
+                }));
     }
 
     Observable<String> myObservableNormal = Observable.create(new Observable.OnSubscribe<String>() {
         @Override
         public void call(Subscriber<? super String> subscriber) {
-            subscriber.onNext("AA");
-            subscriber.onNext("BB");
-            subscriber.onCompleted();
+            for (int i = 0; i < 4; i++) {
+
+                subscriber.onNext(i + "");
+            }
+//            subscriber.onCompleted();
         }
     });
 
