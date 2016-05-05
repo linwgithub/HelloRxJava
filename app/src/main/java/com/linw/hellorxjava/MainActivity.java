@@ -1,10 +1,17 @@
 package com.linw.hellorxjava;
 
+import android.content.Context;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import rx.Observable;
@@ -240,5 +247,64 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void AlarmClick(View view) {
+        //铃声模式:
+        // RINGER_MODE_NORMAL（普通）、
+        // RINGER_MODE_SILENT（静音）、
+        // RINGER_MODE_VIBRATE（震动）
+//        showAudioAlarm();
+//        showVibratorAlarm();
+        AudioManager audioService = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        if (audioService.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+            //非静音
+            showAudioAlarm();
+            showVibratorAlarm();
+        } else {
+            //震动
+            showVibratorAlarm();
+        }
+    }
+
+    public void StopAlarm(View view) {
+        if (mediaPlayer != null) {
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.stop();
+            }
+        }
+    }
+
+    private MediaPlayer mediaPlayer;
+
+    private void showAudioAlarm() {
+        mediaPlayer = MediaPlayer.create(this, getSystemDefultRingtoneUri());
+        mediaPlayer.setLooping(true);
+        try {
+            mediaPlayer.prepare();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mediaPlayer.start();
+    }
+
+    //获取系统默认铃声
+    private Uri getSystemDefultRingtoneUri() {
+        return RingtoneManager.getActualDefaultRingtoneUri(this,
+                RingtoneManager.TYPE_RINGTONE);
+    }
+
+    private void showVibratorAlarm() {
+        //获得震动服务
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        //启动震动,震动一次
+        vibrator.vibrate(1000);
+        //第一个参数，指代一个震动的频率数组。每两个为一组，每组的第一个为等待时间，第二个为震动时间。
+        // 比如 [2000,500,100,400],会先等待2000毫秒，震动500，再等待100，震动400
+        //第二个参数，repest指代从 第几个索引（第一个数组参数） 的位置开始循环震动。
+        //会一直保持循环，我们需要用 vibrator.cancel()主动终止
+        //vibrator.vibrate(new long[]{300,500},0);
     }
 }

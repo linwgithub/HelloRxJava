@@ -21,4 +21,18 @@
         android:onClick="btnclick"
         android:text="RxJava" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="AlarmClick"
+        android:text="startAlarm" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="StopAlarm"
+        android:text="stopAlarm" />
+
+
+
 </LinearLayout>
