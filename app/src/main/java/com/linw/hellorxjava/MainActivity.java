@@ -5,6 +5,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -262,6 +263,12 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         mediaPlayer.start();
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                //execute the task
+                StopAlarm(null);
+            }
+        }, 3000);
     }
 
     //获取系统默认铃声
