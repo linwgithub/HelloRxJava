@@ -205,30 +205,6 @@ public class MainActivity extends AppCompatActivity {
      */
     private void callbackLearn() {
 
-//        CallBackByRX.newUserCallBackSubscribe("begin")
-////                 .map(new Func1<String, String>() {
-////                    @Override
-////                    public String call(String s) {
-////                        return "map Str";
-////                    }
-////                })
-//                .subscribe(CallBackByRX.userCallBackSubscribe("", new Subscriber<String>() {
-//                    @Override
-//                    public void onCompleted() {
-//                        Log.e(LOG_TAG, "OK");
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onNext(String s) {
-//                        Log.e(LOG_TAG, s);
-//                    }
-//                }));
-
         CallBackByRX.newUserCallBackSubscribeList(fromStr)
                 .subscribe(new Subscriber<String>() {
             @Override
@@ -254,8 +230,6 @@ public class MainActivity extends AppCompatActivity {
         // RINGER_MODE_NORMAL（普通）、
         // RINGER_MODE_SILENT（静音）、
         // RINGER_MODE_VIBRATE（震动）
-//        showAudioAlarm();
-//        showVibratorAlarm();
         AudioManager audioService = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         if (audioService.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
             //非静音
