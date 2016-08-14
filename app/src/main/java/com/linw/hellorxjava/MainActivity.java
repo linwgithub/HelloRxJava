@@ -110,16 +110,17 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * 2、简化发送1:送一系列动作
+     *
      */
     private void simpleOneNext() {
-        //1使用just
+        //1使用just 将输入数据直接分发
         Observable.just("simple_just_1", "simple_just_2", "simple_just_3").subscribe(mySubscriberNormal);
-        //2使用from
+        //2使用from 获取输入的数据,将元素依次分发
         Observable.from(fromStr).subscribe(mySubscriberNormal);
     }
 
     /**
-     * 3简化(创建被监听者对象,只关注过程)
+     * 3简化回调(创建被监听者对象,只关注过程)
      */
     private void simpleOnlyNext() {
         myObservableNormal.subscribe(onNextAction);
@@ -133,11 +134,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * 5使用Map变换符
+     * 5使用Map变换符(通过映射将输入数据的类型进行转换)
      */
     private void useMap() {
 
-        //1变换(String -> String)
+        //1、一次变换(String -> String)
         myObservableNormal.map(new Func1<String, String>() {
             @Override
             public String call(String s) {
@@ -145,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }).subscribe(mySubscriberNormal);
 
-        //2多层转换(String->Boolean -> String)
+        //2、多层转换(String->Boolean -> String)
         myObservableNormal.map(new Func1<String, Boolean>() {
             @Override
             public Boolean call(String s) {
